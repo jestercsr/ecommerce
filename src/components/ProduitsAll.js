@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react";
-import "../App.css";
+import { Link, useParams } from "react-router-dom";
 import Navbar from "./Navbar";
-import { Link } from "react-router-dom";
-import Banner from "./ui/Banner";
-import Slider from "./ui/Slider";
 
-export default function Home() {
-  const [produits, setProduits] = useState([]);
+export default function Produits() {
+  const { id } = useParams();
+  const [produits, setProduit] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/admin/produits")
+    fetch(`http://localhost:8080/api/produits`)
       .then((res) => res.json())
-      .then((data) => setProduits(data))
+      .then((data) => setProduit(data))
       .catch((error) => console.error(error));
-  }, []); 
+  }, [id]);
 
+  if (!produits) {
+    return <div>Loading....</div>;
+  }
   return (
     <div>
-      <Navbar />   
-      <Slider />
-      <Banner />
+      <Navbar />
       <div className="grid grid-cols-2 p-5 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {produits.map((produit) => {
           return (
